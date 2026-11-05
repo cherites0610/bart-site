@@ -263,15 +263,6 @@ h2 {
 	border: 1px solid var(--stamp-green);
 	overflow: hidden;
 }
-.stamp-art {
-	/* 純幾何的版畫底紋：同心環 */
-	position: absolute;
-	inset: 0;
-	width: 100%;
-	height: 100%;
-	color: var(--stamp-green);
-	opacity: 0.22;
-}
 .stamp-kind {
 	position: relative;
 	margin: 0;
@@ -1136,5 +1127,265 @@ main:has(> .reading) {
 @media (prefers-reduced-motion: reduce) {
 	.entry h3 a {
 		transition: none;
+	}
+}
+
+/* ───────── Portfolio：貼滿專案郵票的相簿頁 ─────────
+   不是首頁那種固定一屏；專案變多時往下長。 */
+.album.folio {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(2rem, 5vw, 4rem);
+	height: auto;
+	min-height: calc(100svh - 7.5rem);
+	padding-block: clamp(1.5rem, 4vw, 4rem);
+}
+body:has(.album.folio) {
+	height: auto;
+	overflow: visible;
+}
+main:has(> .album.folio) {
+	flex: 1;
+}
+.folio-head h1 {
+	margin: 0;
+	font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+}
+.folio-head p {
+	margin: 1rem 0 0;
+	max-width: 24em;
+	font-size: clamp(1.0625rem, 1.8vw, 1.25rem);
+	line-height: 1.7;
+	text-wrap: balance;
+}
+.folio-head .count {
+	display: inline-block;
+	margin-left: 0.75rem;
+	font-family: var(--mono);
+	font-size: 0.8125rem;
+	letter-spacing: 0.06em;
+	color: var(--album-muted);
+}
+
+.shelf {
+	display: grid;
+	grid-template-columns: minmax(0, clamp(18rem, 32vw, 27rem)) minmax(0, 1fr);
+	gap: clamp(1.5rem, 3.5vw, 3.5rem);
+	align-items: start;
+}
+.shelf-rest {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+	gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+.shelf .stamp {
+	filter: drop-shadow(0 8px 10px rgb(4 8 20 / 0.5));
+	animation: stamp-land 0.6s var(--ease-out) calc(var(--i, 0) * 90ms + 100ms) backwards;
+}
+.stamp-feature {
+	aspect-ratio: 4 / 5;
+}
+.stamp-feature .stamp-inner {
+	padding: 1.4rem;
+}
+.stamp-feature .stamp-title {
+	font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+}
+.stamp-mid {
+	min-height: 14rem;
+}
+.stamp-mid:nth-child(odd) {
+	rotate: 0.8deg;
+}
+.stamp-mid:nth-child(even) {
+	rotate: -0.7deg;
+}
+.stamp-mid .stamp-title {
+	font-size: 1.25rem;
+}
+.stamp-stack {
+	position: relative;
+	margin: 0.9rem 0 0;
+	padding-top: 0.6rem;
+	border-top: 1px solid color-mix(in srgb, var(--stamp-green) 35%, transparent);
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	letter-spacing: 0.06em;
+	color: var(--stamp-green);
+}
+.shelf-rest > .slot {
+	min-height: 9rem;
+}
+@keyframes stamp-land {
+	from {
+		opacity: 0;
+		translate: 0 -14px;
+		scale: 1.04;
+		filter: drop-shadow(0 22px 22px rgb(4 8 20 / 0.3));
+	}
+}
+@media (max-width: 52rem) {
+	.shelf {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.stamp-feature {
+		aspect-ratio: auto;
+		min-height: 22rem;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.shelf .stamp {
+		animation: none;
+	}
+}
+
+
+/* 郵票底紋：雕版郵票常見的細波浪線，上濃下淡，讓文字所在的下半部保持乾淨 */
+.stamp-inner::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='7'%3E%3Cpath d='M0 3.5Q6 0 12 3.5T24 3.5' fill='none' stroke='%231f5f4a' stroke-width='0.6'/%3E%3C/svg%3E") 0 0 / 24px 7px;
+	opacity: 0.2;
+	-webkit-mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.5) 45%, transparent 80%);
+	mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.5) 45%, transparent 80%);
+	pointer-events: none;
+}
+
+/* 郵票版畫：純幾何線條。
+   首頁大郵票：圖樣是郵票內的 flex 子項目，吃掉「文字以外剩下的空間」並依比例縮放，
+   所以不論直放、橫放、平板或桌機，都不會和文字重疊，也不需要依裝置寫斷點。 */
+.stamp-art {
+	flex: 1 1 0;
+	min-height: 0;
+	width: 100%;
+	margin-bottom: 1rem;
+	color: var(--stamp-green);
+	opacity: 0.6;
+}
+.stamp-main .stamp-inner::before {
+	-webkit-mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.6) 60%, rgb(0 0 0 / 0.25) 100%);
+	mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.6) 60%, rgb(0 0 0 / 0.25) 100%);
+}
+.plate > .stamp-main .stamp-title {
+	font-size: clamp(1.4rem, 3.2vw, 2.75rem);
+}
+
+/* Portfolio 主郵票：同樣讓圖樣吃掉文字以外的空間；窄螢幕時郵票高度由內容撐開，
+   所以改成 flex，讓內框有明確高度可分配 */
+@media (max-width: 52rem) {
+	.stamp-feature {
+		display: flex;
+		flex-direction: column;
+		min-height: 26rem;
+	}
+	.stamp-feature .stamp-inner {
+		flex: 1;
+	}
+	.stamp-feature .stamp-art {
+		min-height: 9rem;
+	}
+}
+
+/* ───────── 專案詳情頁（公版）─────────
+   上方一頁相簿：左邊是這個專案的郵票，右邊是標題、摘要、基本資料與連結；
+   下方回到紙頁，用文章的閱讀版型放內文。 */
+body:has(.album.project-cover) {
+	height: auto;
+	overflow: visible;
+}
+main:has(> .album.project-cover) {
+	flex: 1;
+	padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+.album.project-cover {
+	height: auto;
+	min-height: 0;
+	grid-template-columns: minmax(0, 1fr);
+	grid-template-rows: auto;
+	align-items: center;
+	padding-block: clamp(1.5rem, 4vw, 3.5rem);
+}
+.project-stamp {
+	position: relative;
+	z-index: 1;
+}
+.stamp-plate {
+	width: min(100%, 13rem);
+	aspect-ratio: 4 / 5;
+	rotate: -1.2deg;
+	filter: drop-shadow(0 10px 14px rgb(4 8 20 / 0.5));
+}
+.stamp-plate .stamp-inner {
+	padding: 1rem;
+}
+.project-info {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	min-width: 0;
+}
+.project-info h1 {
+	margin: 0;
+	font-size: clamp(2rem, 4.2vw, 3.5rem);
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+}
+.project-summary {
+	margin: 0;
+	max-width: 30em;
+	font-size: clamp(1.0625rem, 1.8vw, 1.25rem);
+	line-height: 1.75;
+	text-wrap: pretty;
+}
+.project-facts {
+	display: grid;
+	gap: 0.5rem 2rem;
+	grid-template-columns: repeat(auto-fit, minmax(10rem, max-content));
+	margin: 0.25rem 0 0;
+}
+.project-facts div {
+	min-width: 0;
+}
+.project-facts dt {
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	letter-spacing: 0.06em;
+	color: var(--album-muted);
+}
+.project-facts dd {
+	margin: 0.1rem 0 0;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+}
+.project-info .contact {
+	align-items: flex-start;
+	margin-top: 0.5rem;
+}
+@media (min-width: 52rem) {
+	.album.project-cover {
+		grid-template-columns: auto minmax(0, 1fr);
+		column-gap: clamp(2rem, 5vw, 5rem);
+	}
+	.stamp-plate {
+		width: clamp(13rem, 20vw, 18rem);
+	}
+}
+.project-body {
+	max-width: 38rem;
+	margin: clamp(2.5rem, 6vw, 4.5rem) auto 0;
+	padding-inline: clamp(1rem, 4vw, 2rem);
+}
+.project-body .prose > :first-child {
+	margin-top: 0;
+}
+@media print {
+	.project-cover .contact,
+	.project-body .back {
+		display: none;
 	}
 }
