@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects', (p) => !p.data.draft);
+	return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, summary, role, stack, demo, source } = project.data;
+---
+
+<Base title={title} description={summary}>
+	<h1>{title}</h1>
+	<p>{summary}</p>
+	<dl>
+		<dt>角色</dt><dd>{role}</dd>
+		<dt>技術</dt><dd>{stack.join('、')}</dd>
+	</dl>
+	<p>
+		{demo && <a href={demo}>Demo</a>}
+		{source && <a href={source}>原始碼</a>}
+	</p>
+	<Content />
+</Base>

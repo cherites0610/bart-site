@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+
+// 草稿只在 dev 預覽
+const posts = await getCollection('blog', (p) => import.meta.env.DEV || !p.data.draft);
+---
+
+<Base title="Blog" description="廖柏安的技術筆記，依日期由新到舊。">
+	<header class="list-head">
+		<h1>Blog</h1>
+		<p>技術筆記，依日期由新到舊。{posts.length > 0 && <span class="count">共 {posts.length} 篇</span>}</p>
+	</header>
+	{posts.length === 0 ? (
+		<p class="placeholder">【預留位置】第一篇文章還在寫，寫好之後會出現在這裡。</p>
+	) : (
+		<PostList posts={posts} />
+	)}
+</Base>

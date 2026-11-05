@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-05T08:58:09.486Z",
+  "title": "Design System: 廖柏安 Bart 個人網站",
+  "extensions": {
+    "colorMeta": {
+      "album-navy": {
+        "role": "neutral",
+        "displayName": "相簿深藍",
+        "canonical": "#14213a",
+        "tonalRamp": [
+          "#05080f",
+          "#0a111f",
+          "#0e1729",
+          "#14213a",
+          "#25375a",
+          "#4a5f8a",
+          "#8d9cba",
+          "#d3d9e5"
+        ]
+      },
+      "post-office-green": {
+        "role": "secondary",
+        "displayName": "郵局綠",
+        "canonical": "#1f5f4a",
+        "tonalRamp": [
+          "#0a1f18",
+          "#10362a",
+          "#1f5f4a",
+          "#2e7f64",
+          "#4f9f84",
+          "#6fbf9c",
+          "#a9d9c3",
+          "#dff0e8"
+        ]
+      },
+      "postmark-red": {
+        "role": "primary",
+        "displayName": "郵戳紅",
+        "canonical": "#b3261e",
+        "tonalRamp": [
+          "#3a0a07",
+          "#6b1510",
+          "#8f1e18",
+          "#b3261e",
+          "#d8402f",
+          "#ff7566",
+          "#ffb0a6",
+          "#ffe2dd"
+        ]
+      },
+      "stamp-face": {
+        "role": "neutral",
+        "displayName": "郵票面",
+        "canonical": "#f4efe3",
+        "tonalRamp": [
+          "#5a5648",
+          "#8a8573",
+          "#b5af9b",
+          "#d6d0bd",
+          "#e6e0cf",
+          "#f4efe3",
+          "#f8f5ec",
+          "#fcfaf5"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "首頁名字，上限 6rem。"
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "大郵票標題。"
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "郵票小標、導覽、日期。"
+      },
+      "article-title": {
+        "displayName": "Article Title",
+        "purpose": "文章頁標題，宋體粗體。"
+      },
+      "article-body": {
+        "displayName": "Article Body",
+        "purpose": "文章內文，38em 欄寬、行高 1.9。"
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "文章日期、閱讀時間、標籤、頁尾。"
+      },
+      "list-title": {
+        "displayName": "List Title",
+        "purpose": "文章列表每篇的標題，宋體粗體。"
+      }
+    },
+    "shadows": [
+      {
+        "name": "stamp-large",
+        "value": "drop-shadow(0 10px 14px rgb(4 8 20 / 0.5))",
+        "purpose": "大郵票貼在紙上的投影。"
+      },
+      {
+        "name": "stamp-small",
+        "value": "drop-shadow(0 6px 8px rgb(4 8 20 / 0.45))",
+        "purpose": "小郵票。"
+      },
+      {
+        "name": "stamp-link",
+        "value": "drop-shadow(0 4px 6px rgb(4 8 20 / 0.45))",
+        "purpose": "郵票形連結。"
+      },
+      {
+        "name": "code-block",
+        "value": "0 10px 24px -14px rgb(5 10 25 / 0.55)",
+        "purpose": "文章頁程式碼區塊的向下柔影。"
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "郵票 hover 與郵戳蓋下的指數 ease-out。"
+      },
+      {
+        "name": "reading-progress",
+        "value": "transform: scaleX(p), 無過渡",
+        "purpose": "頁面頂端閱讀進度線，直接跟隨捲動。"
+      },
+      {
+        "name": "link-underline-draw",
+        "value": "background-size 0 → 100%, 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "列表標題的綠色底線由左畫出，hover 與 focus 觸發。"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "stacked",
+        "value": "1200px"
+      },
+      {
+        "name": "phone",
+        "value": "576px"
+      },
+      {
+        "name": "article-toc",
+        "value": "72rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Stamp Link",
+      "kind": "custom",
+      "refersTo": "stamp-link",
+      "description": "郵票形的小連結，用於 GitHub 與 Email。",
+      "html": "<a class=\"ds-stamp-link\" href=\"#\"><span class=\"ds-label\">GITHUB</span><span class=\"ds-action\">看我的程式碼</span></a>",
+      "css": ".ds-stamp-link{--p:4px;--pitch:10px;display:inline-flex;flex-direction:column;gap:.15rem;min-width:7.5rem;padding:.7rem .9rem;color:#14213a;text-decoration:none;background:radial-gradient(circle at 50% 0,#14213a 0 var(--p),transparent calc(var(--p) + .5px)) 0 0/var(--pitch) calc(var(--p) + 1px) repeat-x,radial-gradient(circle at 50% 100%,#14213a 0 var(--p),transparent calc(var(--p) + .5px)) 0 100%/var(--pitch) calc(var(--p) + 1px) repeat-x,radial-gradient(circle at 0 50%,#14213a 0 var(--p),transparent calc(var(--p) + .5px)) 0 0/calc(var(--p) + 1px) var(--pitch) repeat-y,radial-gradient(circle at 100% 50%,#14213a 0 var(--p),transparent calc(var(--p) + .5px)) 100% 0/calc(var(--p) + 1px) var(--pitch) repeat-y,#f4efe3;filter:drop-shadow(0 4px 6px rgb(4 8 20/.45));transition:transform .35s cubic-bezier(.16,1,.3,1)}.ds-stamp-link:hover,.ds-stamp-link:focus-visible{transform:translateY(-4px) rotate(-.6deg)}.ds-stamp-link:focus-visible{outline:2px solid #d8402f;outline-offset:5px}.ds-label{font:500 .6875rem 'JetBrains Mono',monospace;letter-spacing:.06em;color:#1f5f4a}.ds-action{font:700 1.0625rem/1.4 'Noto Serif TC',serif}"
+    },
+    {
+      "name": "Slot",
+      "kind": "custom",
+      "refersTo": "slot",
+      "description": "尚未貼上郵票的預留位置。",
+      "html": "<div class=\"ds-slot\">待蓋郵戳</div>",
+      "css": ".ds-slot{display:grid;place-items:end start;min-height:7.5rem;padding:1rem;border:1.5px dashed rgb(236 230 214/.38);border-radius:2px;background:#14213a;color:#aab4c8;font:700 .9375rem 'Noto Serif TC',serif;letter-spacing:.12em}"
+    },
+    {
+      "name": "Article Header",
+      "kind": "custom",
+      "refersTo": "article-title",
+      "description": "文章頁標題區：紅色日期與閱讀時間、標題、摘要。",
+      "html": "<header class=\"ds-head\"><p class=\"ds-meta\"><time>2026-11-05</time><span>約 3 分鐘讀完</span></p><h1>文章標題</h1><p class=\"ds-lede\">一句摘要，說這篇在講什麼。</p></header>",
+      "css": ".ds-head{max-width:38rem;padding-bottom:1.75rem;border-bottom:1px solid #cfc8b6;color:#14213a}.ds-meta{display:flex;gap:1.25rem;margin:0 0 1.25rem;font:400 .8125rem 'JetBrains Mono',monospace;letter-spacing:.06em;color:#4f5a74}.ds-meta time{color:#b3261e;font-weight:500}.ds-head h1{margin:0;font:700 2.5rem/1.25 'Noto Serif TC',serif;letter-spacing:-.01em}.ds-lede{margin:1.25rem 0 0;font:400 1.125rem/1.8 'Noto Sans TC',sans-serif;color:#4f5a74}"
+    },
+    {
+      "name": "Article Prose",
+      "kind": "custom",
+      "refersTo": "article-body",
+      "description": "文章內文：宋體小標、黑體內文、綠色清單符號與連結底線。",
+      "html": "<div class=\"ds-prose\"><h2>小標題</h2><p>內文段落，行高 1.9，每行約 35 個全形字。<a href=\"#\">連結</a>與<code>行內程式碼</code>。</p><ul><li>清單項目</li></ul></div>",
+      "css": ".ds-prose{max-width:38rem;font:400 1.0625rem/1.9 'Noto Sans TC',sans-serif;color:#14213a}.ds-prose h2{margin:0 0 .8em;font:700 1.625rem/1.4 'Noto Serif TC',serif}.ds-prose p{margin:0 0 1.4em}.ds-prose a{text-decoration:underline;text-decoration-color:#1f5f4a;text-decoration-thickness:1.5px;text-underline-offset:.25em}.ds-prose a:hover{text-decoration-color:#14213a}.ds-prose code{padding:.1em .4em;font:.875em 'JetBrains Mono',monospace;background:rgb(20 33 58/.08);border-radius:2px}.ds-prose ul{list-style:none;padding-left:1.6em}.ds-prose li{position:relative}.ds-prose li:before{content:'';position:absolute;left:-1.1em;top:.95em;width:.4em;height:.4em;background:#1f5f4a;border-radius:50%}"
+    },
+    {
+      "name": "Post Entry",
+      "kind": "custom",
+      "refersTo": "list-title",
+      "description": "文章列表的一列：紅色月-日、宋體標題、摘要、閱讀時間與標籤。",
+      "html": "<div class=\"ds-entry\"><time>11-05</time><div><h3><a href=\"#\">文章標題</a></h3><p class=\"ds-desc\">一句摘要，說這篇在講什麼。</p><p class=\"ds-meta\"><span>約 3 分鐘</span><span>#標籤</span></p></div></div>",
+      "css": ".ds-entry{display:grid;grid-template-columns:4.5rem 1fr;gap:0 1.25rem;padding:1.5rem 0;border-top:1px solid #cfc8b6;color:#14213a}.ds-entry time{padding-top:.45rem;font:400 .8125rem 'JetBrains Mono',monospace;letter-spacing:.06em;color:#b3261e}.ds-entry h3{margin:0;font:700 1.5rem/1.4 'Noto Serif TC',serif}.ds-entry a{color:inherit;text-decoration:none;background:linear-gradient(#1f5f4a,#1f5f4a) 0 100%/0 1.5px no-repeat;transition:background-size .35s cubic-bezier(.16,1,.3,1)}.ds-entry a:hover,.ds-entry a:focus-visible{background-size:100% 1.5px}.ds-desc{margin:.4rem 0 0;color:#4f5a74}.ds-meta{display:flex;gap:1rem;margin:.6rem 0 0;font:400 .8125rem 'JetBrains Mono',monospace;letter-spacing:.06em;color:#4f5a74}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Stamp Album",
+    "overview": "整個網站是一本集郵冊。首頁是封面，Portfolio 是貼滿專案郵票的相簿頁，Blog 是依日期排列、蓋了郵戳的信封。氣質是安靜、有手感：深藍相簿頁、米白郵票、郵局綠負責結構、郵戳紅只用在日期和目前位置。",
+    "keyCharacteristics": [
+      "深藍相簿頁是舞台，郵票是唯一的亮面物件。",
+      "郵票有齒孔、護貼條與下方投影。",
+      "紅色只屬於郵戳與目前頁面。",
+      "唯一的動態：郵戳蓋下去。",
+      "文章頁沒有相簿，只有紙頁、髮絲線與三種字型。",
+      "文章列表靠日期、標題與髮絲線建立節奏，不用卡片。"
+    ],
+    "rules": [
+      {
+        "name": "The Red Is Rare Rule",
+        "body": "紅色只標日期與「現在在哪」，不拿來裝飾、不做按鈕底色。",
+        "section": "colors"
+      },
+      {
+        "name": "The Object Rule",
+        "body": "相簿頁與郵票不跟著亮暗主題反轉；它們是放在桌上的物件，換的是桌面。",
+        "section": "colors"
+      },
+      {
+        "name": "The Three Voices Rule",
+        "body": "宋體說是什麼，黑體說為什麼，等寬字說何時／多少。",
+        "section": "typography"
+      },
+      {
+        "name": "The Pasted-On Rule",
+        "body": "影子永遠向下、有偏移、有模糊；不使用零偏移光暈或硬邊色塊陰影。",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do 讓每個專案以一張郵票出現，大小代表主次。",
+      "Do 未完成的位置一律用虛線「待蓋郵戳」空位並明確標示為預留。",
+      "Do 用郵戳紅標日期與目前頁面，其餘結構用郵局綠。",
+      "Do 文章內文 38em 欄寬、行高 1.9，標題上多下少。"
+    ],
+    "donts": [
+      "Don't 把專案排成大小一樣的卡片網格。",
+      "Don't 虛構專案、文章、雇主、技能或見證。",
+      "Don't 讓相簿頁與郵票隨暗色主題反轉。",
+      "Don't 在文章頁用左側粗色條做引言，或把文章包進卡片。",
+      "Don't 把文章列表做成大小一樣的卡片格或加縮圖。"
+    ]
+  }
+}
