@@ -99,6 +99,21 @@ h2 {
 	text-wrap: balance;
 }
 
+.skip-link {
+	position: absolute;
+	left: 0.75rem;
+	top: -4rem;
+	z-index: 10;
+	padding: 0.5rem 0.9rem;
+	background: var(--stamp-face);
+	color: var(--stamp-ink);
+	font-family: var(--mono);
+	font-size: 0.875rem;
+}
+.skip-link:focus {
+	top: 0.75rem;
+}
+
 /* 站台導覽 */
 .site-header {
 	max-width: 160rem;
