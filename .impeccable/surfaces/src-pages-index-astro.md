@@ -13,9 +13,9 @@ Audience and job: recruiters, interviewers and prospective collaborators who wan
 
 Chosen direction: 集郵冊 (stamp album). Memorable moment: the latest project is a large stamp on an album page with today's postmark.
 
-Decided: positioning line "我是全端開發者，從人的需求出發，把事情做成系統。" sits next to the name, one size step below it. Links are GitHub and Email only, each a stamp-shaped entry. Projects have individual detail pages (the stamp enlarged, with its description). Fonts: Noto Serif TC bold for the name and headings, Noto Sans TC for body and articles, JetBrains Mono for postmarks, dates, numbers and code; Google Fonts sliced loading for the Chinese faces; body line height about 1.8, about 35 full-width characters per line.
+Decided: positioning line "我是全端開發者，從人的需求出發，把事情做成系統。" sits next to the name, one size step below it. Projects have individual detail pages (the stamp enlarged, with its description). Fonts: Noto Serif TC bold for the name and headings, Noto Sans TC for body and articles, JetBrains Mono for postmarks, dates, numbers and code; Google Fonts sliced loading for the Chinese faces; body line height about 1.8, about 35 full-width characters per line.
 
-Page mapping: Home is the cover page; Portfolio is the album pages of project stamps; Blog is a list of postmarked envelopes ordered by date; About and Links are single pages.
+Page mapping: Home is the cover page; Portfolio is the album pages of project stamps; Blog is a list of postmarked envelopes ordered by date; About is a single page.
 
 Unresolved: dark/light palette values, exact stamp sizes and placement rules, motion details.
 
