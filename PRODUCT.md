@@ -16,7 +16,7 @@ Primary audiences (confirmed): recruiters and interviewers who want to judge the
 
 ## Product Purpose
 
-A personal website for a full-stack, multi-domain developer. It hosts a technical-notes blog, a portfolio of programming projects, and a links area (GitHub and Email). Success: a recruiter or prospective collaborator quickly understands what the owner builds and can reach them.
+A personal website for a full-stack, multi-domain developer. It hosts a technical-notes blog and a portfolio of programming projects. GitHub and Email contact links live on the Home and About pages. Success: a recruiter or prospective collaborator quickly understands what the owner builds and can reach them.
 
 ## Positioning
 
@@ -25,13 +25,11 @@ A personal website for a full-stack, multi-domain developer. It hosts a technica
 ## Capabilities and Constraints
 
 - Language: Traditional Chinese (zh-Hant) only; no i18n routing.
-- Sections for v1: Home, Blog, Portfolio (projects), About, Links. Routes: `/`, `/blog`, `/blog/[slug]`, `/blog/tags/[tag]`, `/projects`, `/projects/[slug]`, `/about`, `/links`, `/rss.xml`, 404.
-- Navigation: Home, Blog, Portfolio, About, Links, plus a dark-mode toggle.
+- Sections for v1: Home, Blog, Portfolio (projects), About. Routes: `/`, `/blog`, `/blog/[slug]`, `/blog/tags/[tag]`, `/projects`, `/projects/[slug]`, `/about`, `/rss.xml`, 404.
+- Navigation: Home, Blog, Portfolio, About, plus a dark-mode toggle.
 - Blog: technical notes; tags, RSS, code highlighting, article pages.
 - Portfolio: programming projects only; each with summary, tech stack, demo/source links.
-- Contact is folded into the Links area, not a separate page.
 - Dark mode is wanted for the first version.
-- Links area: GitHub and Email only for now.
 - Projects get individual detail pages (summary, tech stack, role, demo and source links).
 - Positioning line (confirmed): 我是全端開發者，從人的需求出發，把事情做成系統。
 

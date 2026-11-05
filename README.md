@@ -12,7 +12,6 @@
 - **Blog**：技術筆記，支援標籤頁、RSS、程式碼高亮
 - **Projects**：程式作品集，每個專案有獨立詳情頁（摘要、技術棧、角色、Demo／原始碼連結）
 - **About**：證件照郵票與自我介紹
-- **Links**：GitHub 與 Email
 - 深色模式切換
 - 僅支援繁體中文（zh-Hant）
 
@@ -54,7 +53,7 @@ npm run dev
 │   │   ├── blog/         # 文章（Markdown）
 │   │   └── projects/     # 專案（Markdown）
 │   ├── layouts/Base.astro
-│   ├── pages/            # 路由：/、/blog、/projects、/about、/links、/rss.xml、404
+│   ├── pages/            # 路由：/、/blog、/projects、/about、/rss.xml、404
 │   ├── styles/global.css
 │   └── content.config.ts # 內容集合 schema
 ├── DESIGN.md             # 設計系統
