@@ -480,6 +480,84 @@ a.stamp:focus-visible {
 	}
 }
 
+/* ───────── 首頁固定一屏：不可上下捲動 ─────────
+   相簿頁高度 = 視窗高 − 導覽與頁尾（7.5rem）；郵票依剩餘高度縮放。 */
+body:has(.album:not(.about)) {
+	height: 100dvh;
+	overflow: hidden;
+}
+main:has(> .album:not(.about)) {
+	flex: none;
+}
+.album:not(.about) {
+	--pad: clamp(1rem, 3vw, 3rem);
+	--H: min(calc(100dvh - 7.5rem - 2 * var(--pad)), 50rem, 38vw);
+	height: calc(100dvh - 7.5rem);
+	min-height: 0;
+	padding-block: var(--pad);
+}
+.plate {
+	height: var(--H);
+	min-height: 0;
+	grid-template-columns: min(calc(var(--H) * 0.8), calc(100% - clamp(9rem, 13vw, 17rem) - clamp(1rem, 2vw, 1.75rem))) clamp(9rem, 13vw, 17rem);
+}
+.plate > .stamp-main {
+	height: auto;
+	min-height: 0;
+	aspect-ratio: auto;
+}
+.plate > .stamp-small,
+.plate > .slot {
+	min-height: 0;
+}
+
+@media (max-width: 75rem) {
+	.album:not(.about) {
+		--H: auto;
+		grid-template-rows: auto minmax(0, 1fr);
+	}
+	.plate {
+		height: 100%;
+		align-self: stretch;
+		grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+	}
+}
+@media (max-width: 36rem) {
+	.album:not(.about) {
+		grid-template-rows: auto minmax(0, 1fr);
+		gap: 1rem;
+	}
+	.cover {
+		padding-top: 1rem;
+		gap: 1.25rem;
+	}
+	.cover .line {
+		margin-top: 0.75rem;
+	}
+	.plate {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-rows: minmax(0, 1fr) 5.5rem;
+	}
+	.plate > .stamp-main {
+		grid-column: 1 / -1;
+		grid-row: auto;
+	}
+}
+/* 視窗太矮放不下時（橫放手機等），退回可捲動，避免內容被切掉 */
+@media (max-height: 36rem) {
+	body:has(.album:not(.about)) {
+		height: auto;
+		overflow: visible;
+	}
+	.album:not(.about) {
+		height: auto;
+		min-height: 30rem;
+	}
+	.plate {
+		min-height: 24rem;
+	}
+}
+
 /* ───────── About：相簿頁（左：證件照郵票，右：自我介紹） ───────── */
 .album.about {
 	min-height: 0;
