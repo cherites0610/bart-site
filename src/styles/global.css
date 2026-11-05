@@ -482,14 +482,14 @@ a.stamp:focus-visible {
 
 /* ───────── 首頁固定一屏：不可上下捲動 ─────────
    相簿頁高度 = 視窗高 − 導覽與頁尾（7.5rem）；郵票依剩餘高度縮放。 */
-body:has(.album) {
+body:has(.album:not(.about)) {
 	height: 100dvh;
 	overflow: hidden;
 }
-main:has(> .album) {
+main:has(> .album:not(.about)) {
 	flex: none;
 }
-.album {
+.album:not(.about) {
 	--pad: clamp(1rem, 3vw, 3rem);
 	--H: min(calc(100dvh - 7.5rem - 2 * var(--pad)), 50rem, 38vw);
 	height: calc(100dvh - 7.5rem);
@@ -512,7 +512,7 @@ main:has(> .album) {
 }
 
 @media (max-width: 75rem) {
-	.album {
+	.album:not(.about) {
 		--H: auto;
 		grid-template-rows: auto minmax(0, 1fr);
 	}
@@ -523,7 +523,7 @@ main:has(> .album) {
 	}
 }
 @media (max-width: 36rem) {
-	.album {
+	.album:not(.about) {
 		grid-template-rows: auto minmax(0, 1fr);
 		gap: 1rem;
 	}
@@ -545,15 +545,177 @@ main:has(> .album) {
 }
 /* 視窗太矮放不下時（橫放手機等），退回可捲動，避免內容被切掉 */
 @media (max-height: 36rem) {
-	body:has(.album) {
+	body:has(.album:not(.about)) {
 		height: auto;
 		overflow: visible;
 	}
-	.album {
+	.album:not(.about) {
 		height: auto;
 		min-height: 30rem;
 	}
 	.plate {
 		min-height: 24rem;
+	}
+}
+
+/* ───────── About：相簿頁（左：證件照郵票，右：自我介紹） ───────── */
+.album.about {
+	min-height: 0;
+	align-items: center;
+	grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+.about .portrait {
+	display: grid;
+	place-items: center;
+	position: relative;
+	z-index: 1;
+}
+.about .portrait .stamp-main {
+	width: min(100%, 26rem);
+	height: auto;
+	aspect-ratio: 4 / 5;
+	rotate: -1.2deg;
+	filter: drop-shadow(0 10px 14px rgb(4 8 20 / 0.5));
+}
+.about .portrait .stamp-inner {
+	padding: 0;
+}
+.about .portrait img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.about-body {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+.about-body h1 {
+	margin: 0;
+	font-size: clamp(2.25rem, 4.5vw, 4rem);
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+}
+.about-body .lead {
+	margin: 0;
+	max-width: 22em;
+	font-size: clamp(1.125rem, 2vw, 1.5rem);
+	line-height: 1.7;
+	text-wrap: balance;
+}
+.about-body .prose {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	max-width: 36em;
+	color: var(--album-ink);
+}
+.about-body .prose p {
+	margin: 0;
+}
+.facts {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: clamp(1rem, 2vw, 1.75rem);
+	margin: 0.5rem 0 0;
+	padding: 0;
+	list-style: none;
+	max-width: 44rem;
+}
+.facts .stamp-small {
+	min-height: 9rem;
+	filter: drop-shadow(0 6px 8px rgb(4 8 20 / 0.45));
+}
+.facts .stamp-small:nth-child(1) {
+	rotate: -0.8deg;
+}
+.facts .stamp-small:nth-child(3) {
+	rotate: 1.2deg;
+}
+.about-body .contact {
+	align-items: flex-start;
+}
+
+@media (max-width: 75rem) {
+	.album.about {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: auto;
+	}
+	.about .portrait .stamp-main {
+		width: min(100%, 15rem);
+		min-height: 0;
+	}
+	.about .portrait {
+		justify-items: start;
+	}
+}
+@media (max-width: 36rem) {
+	.facts {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.facts .stamp-small {
+		min-height: 0;
+	}
+	.facts .stamp-small .stamp-note {
+		display: block;
+	}
+	.facts .stamp-small .stamp-title {
+		font-size: 1rem;
+	}
+}
+.facts .stamp-title span {
+	display: inline-block;
+}
+
+/* About 在桌機上一屏放完，不出現捲軸：依視窗高度縮放 */
+.about .portrait {
+	align-content: center;
+	gap: clamp(1rem, 3svh, 2rem);
+}
+.about .portrait .contact {
+	justify-content: center;
+}
+@media (min-width: 75.01rem) and (min-height: 34rem) {
+	body:has(.album.about) {
+		height: 100svh;
+	}
+	main:has(> .album.about) {
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+	}
+	.album.about {
+		flex: 1;
+		min-height: 0;
+		padding-block: clamp(1rem, 3svh, 2.5rem);
+	}
+	.about .portrait .stamp-main {
+		width: auto;
+		height: clamp(14rem, 58svh, 34rem);
+	}
+	.about-body {
+		gap: clamp(0.6rem, 2svh, 1.5rem);
+	}
+	.about-body h1 {
+		font-size: clamp(1.75rem, 6svh, 4rem);
+	}
+	.about-body .lead {
+		font-size: clamp(1rem, 2.6svh, 1.5rem);
+		max-width: none;
+	}
+	.about-body .prose {
+		max-width: 46em;
+		gap: clamp(0.5rem, 1.4svh, 1rem);
+		font-size: clamp(0.8125rem, 1.9svh, 1rem);
+		line-height: 1.75;
+	}
+	.facts {
+		margin-top: 0;
+	}
+	.facts .stamp-small {
+		min-height: clamp(5.5rem, 15svh, 9rem);
 	}
 }
