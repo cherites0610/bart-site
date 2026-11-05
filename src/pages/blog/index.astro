@@ -1,24 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
 
-const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+// 草稿只在 dev 預覽
+const posts = await getCollection('blog', (p) => import.meta.env.DEV || !p.data.draft);
 ---
 
-<Base title="Blog">
-	<h1>Blog</h1>
+<Base title="Blog" description="廖柏安的技術筆記，依日期由新到舊。">
+	<header class="list-head">
+		<h1>Blog</h1>
+		<p>技術筆記，依日期由新到舊。{posts.length > 0 && <span class="count">共 {posts.length} 篇</span>}</p>
+	</header>
 	{posts.length === 0 ? (
-		<p class="placeholder">【預留位置】尚無文章。</p>
+		<p class="placeholder">【預留位置】第一篇文章還在寫，寫好之後會出現在這裡。</p>
 	) : (
-		<ul>
-			{posts.map((p) => (
-				<li>
-					<time datetime={p.data.pubDate.toISOString()}>{p.data.pubDate.toISOString().slice(0, 10)}</time>
-					<a href={`/blog/${p.id}`}>{p.data.title}</a>
-				</li>
-			))}
-		</ul>
+		<PostList posts={posts} />
 	)}
 </Base>
