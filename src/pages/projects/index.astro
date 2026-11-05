@@ -1,21 +1,66 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import StampArt from '../../components/StampArt.astro';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
 	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+const [featured, ...others] = projects;
+// 至少留 3 個預留位置，讓相簿頁看起來是「還在貼」而不是空的
+const emptySlots = Math.max(3 - others.length, 0);
+const ym = (d: Date) =>
+	new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit' })
+		.format(d)
+		.replace('-', '.');
 ---
 
-<Base title="Portfolio">
-	<h1>Portfolio</h1>
-	{projects.length === 0 ? (
-		<p class="placeholder">【預留位置】尚無專案（待蓋郵戳）。</p>
-	) : (
-		<ul>
-			{projects.map((p) => (
-				<li><a href={`/projects/${p.id}`}>{p.data.title}</a>：{p.data.summary}</li>
-			))}
-		</ul>
-	)}
+<Base title="Portfolio" description="廖柏安做過的程式專案，每個專案一張郵票。">
+	<div class="album folio">
+		<header class="folio-head">
+			<h1>Portfolio</h1>
+			<p>
+				把需求做成系統的紀錄，每個專案貼成一張郵票。
+				{projects.length > 0 && <span class="count">已貼 {projects.length} 張</span>}
+			</p>
+		</header>
+
+		<section class="shelf" aria-label="專案郵票">
+			{featured ? (
+				<a class="stamp stamp-feature" href={`/projects/${featured.id}`} style="--i: 0">
+					<div class="stamp-inner">
+						{featured.data.art && <StampArt kind={featured.data.art} />}
+						<p class="stamp-kind">{ym(featured.data.date)}</p>
+						<h2 class="stamp-title">{featured.data.title}</h2>
+						<p class="stamp-note">{featured.data.summary}</p>
+						<p class="stamp-stack">{featured.data.stack.join(' · ')}</p>
+					</div>
+				</a>
+			) : (
+				<div class="stamp stamp-feature" role="group" aria-label="預留位置：專案">
+					<div class="stamp-inner">
+						<p class="stamp-kind">預留位置</p>
+						<h2 class="stamp-title">待蓋郵戳</h2>
+						<p class="stamp-note">第一個專案完成後，會貼在這裡。</p>
+					</div>
+				</div>
+			)}
+
+			<div class="shelf-rest">
+				{others.map((p, i) => (
+					<a class="stamp stamp-mid" href={`/projects/${p.id}`} style={`--i: ${i + 1}`}>
+						<div class="stamp-inner">
+							<p class="stamp-kind">{ym(p.data.date)}</p>
+							<h2 class="stamp-title">{p.data.title}</h2>
+							<p class="stamp-note">{p.data.summary}</p>
+							<p class="stamp-stack">{p.data.stack.join(' · ')}</p>
+						</div>
+					</a>
+				))}
+				{Array.from({ length: emptySlots }, () => (
+					<div class="slot" role="group" aria-label="預留位置：專案">待蓋郵戳</div>
+				))}
+			</div>
+		</section>
+	</div>
 </Base>

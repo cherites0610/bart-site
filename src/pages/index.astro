@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import StampArt from '../components/StampArt.astro';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
 	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -40,20 +41,16 @@ const today = fmt(new Date());
 			{latest ? (
 				<a class="stamp stamp-main" href={`/projects/${latest.id}`}>
 					<div class="stamp-inner">
-						<svg class="stamp-art" viewBox="0 0 200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="0.8">
-							{Array.from({ length: 14 }, (_, i) => <circle cx="140" cy="70" r={10 + i * 12} />)}
-						</svg>
+						{latest.data.art && <StampArt kind={latest.data.art} />}
 						<p class="stamp-kind">最新專案</p>
 						<h2 class="stamp-title">{latest.data.title}</h2>
 						<p class="stamp-note">{latest.data.summary}</p>
+						<p class="stamp-stack">{latest.data.stack.join(" · ")}</p>
 					</div>
 				</a>
 			) : (
 				<div class="stamp stamp-main" role="group" aria-label="預留位置：最新專案">
 					<div class="stamp-inner">
-						<svg class="stamp-art" viewBox="0 0 200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="0.8">
-							{Array.from({ length: 14 }, (_, i) => <circle cx="140" cy="70" r={10 + i * 12} />)}
-						</svg>
 						<p class="stamp-kind">預留位置・最新專案</p>
 						<h2 class="stamp-title">待蓋郵戳</h2>
 						<p class="stamp-note">第一個專案完成後，會以最大的一張郵票貼在這裡。</p>

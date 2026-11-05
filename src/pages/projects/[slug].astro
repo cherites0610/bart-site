@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import StampArt from '../../components/StampArt.astro';
 
 export async function getStaticPaths() {
 	const projects = await getCollection('projects', (p) => !p.data.draft);
@@ -8,19 +9,58 @@ export async function getStaticPaths() {
 }
 const { project } = Astro.props;
 const { Content } = await render(project);
-const { title, summary, role, stack, demo, source } = project.data;
+const { title, summary, role, stack, demo, source, art, date } = project.data;
+
+const ym = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit' })
+	.format(date)
+	.replace('-', '.');
 ---
 
 <Base title={title} description={summary}>
-	<h1>{title}</h1>
-	<p>{summary}</p>
-	<dl>
-		<dt>角色</dt><dd>{role}</dd>
-		<dt>技術</dt><dd>{stack.join('、')}</dd>
-	</dl>
-	<p>
-		{demo && <a href={demo}>Demo</a>}
-		{source && <a href={source}>原始碼</a>}
-	</p>
-	<Content />
+	<div class="album project-cover">
+		<div class="project-stamp">
+			<div class="stamp stamp-plate" role="img" aria-label={`${title} 專案郵票`}>
+				<div class="stamp-inner">
+					{art && <StampArt kind={art} />}
+					<p class="stamp-kind">{ym}</p>
+					<p class="stamp-stack">{stack.join(' · ')}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="project-info">
+			<h1>{title}</h1>
+			<p class="project-summary">{summary}</p>
+
+			<dl class="project-facts">
+				<div><dt>角色</dt><dd>{role}</dd></div>
+				<div><dt>技術</dt><dd>{stack.join('、')}</dd></div>
+				<div><dt>時間</dt><dd>{ym}</dd></div>
+			</dl>
+
+			{(demo || source) && (
+				<div class="contact">
+					{demo && (
+						<a class="stamp stamp-link" href={demo} target="_blank" rel="noopener">
+							<span class="label">LIVE</span>
+							<span class="action">前往線上網站</span>
+						</a>
+					)}
+					{source && (
+						<a class="stamp stamp-link" href={source} target="_blank" rel="noopener">
+							<span class="label">GITHUB</span>
+							<span class="action">看原始碼</span>
+						</a>
+					)}
+				</div>
+			)}
+		</div>
+	</div>
+
+	<div class="project-body">
+		<div class="prose">
+			<Content />
+		</div>
+		<p class="post-foot"><a class="back" href="/projects">回到 Portfolio</a></p>
+	</div>
 </Base>
