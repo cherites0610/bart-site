@@ -1,9 +1,102 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+
+const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const [latest, ...others] = projects;
+const smalls = others.slice(0, 3);
+const emptySlots = 3 - smalls.length;
+
+// 建置當下的日期當預設；瀏覽器端會換成訪客「今天」的日期
+const fmt = (d: Date) =>
+	new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' })
+		.format(d)
+		.replaceAll('-', '.');
+const today = fmt(new Date());
 ---
 
 <Base>
-	<h1>廖柏安 Bart</h1>
-	<p>我是全端開發者，從人的需求出發，把事情做成系統。</p>
-	<p class="placeholder">【預留位置】最新專案將顯示於此（待蓋郵戳）。</p>
+	<div class="album">
+		<section class="cover" aria-labelledby="name">
+			<div>
+				<h1 id="name">廖柏安<span class="latin">Bart</span></h1>
+				<p class="line"><span>我是全端開發者，</span><span>從人的需求出發，</span><span>把事情做成系統。</span></p>
+			</div>
+			<div class="contact">
+				<a class="stamp stamp-link" href="https://github.com/cherites0610">
+					<span class="label">GITHUB</span>
+					<span class="action">看我的程式碼</span>
+				</a>
+				<a class="stamp stamp-link" href="mailto:cherites0610@gmail.com">
+					<span class="label">EMAIL</span>
+					<span class="action">寄信給我</span>
+				</a>
+			</div>
+		</section>
+
+		<section class="plate" aria-label="專案郵票">
+			{latest ? (
+				<a class="stamp stamp-main" href={`/projects/${latest.id}`}>
+					<div class="stamp-inner">
+						<svg class="stamp-art" viewBox="0 0 200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="0.8">
+							{Array.from({ length: 14 }, (_, i) => <circle cx="140" cy="70" r={10 + i * 12} />)}
+						</svg>
+						<p class="stamp-kind">最新專案</p>
+						<h2 class="stamp-title">{latest.data.title}</h2>
+						<p class="stamp-note">{latest.data.summary}</p>
+					</div>
+				</a>
+			) : (
+				<div class="stamp stamp-main" role="group" aria-label="預留位置：最新專案">
+					<div class="stamp-inner">
+						<svg class="stamp-art" viewBox="0 0 200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="0.8">
+							{Array.from({ length: 14 }, (_, i) => <circle cx="140" cy="70" r={10 + i * 12} />)}
+						</svg>
+						<p class="stamp-kind">預留位置・最新專案</p>
+						<h2 class="stamp-title">待蓋郵戳</h2>
+						<p class="stamp-note">第一個專案完成後，會以最大的一張郵票貼在這裡。</p>
+					</div>
+				</div>
+			)}
+
+			{smalls.map((p) => (
+				<a class="stamp stamp-small" href={`/projects/${p.id}`}>
+					<div class="stamp-inner">
+						<h2 class="stamp-title">{p.data.title}</h2>
+						<p class="stamp-note">{p.data.summary}</p>
+					</div>
+				</a>
+			))}
+			{Array.from({ length: emptySlots }, () => (
+				<div class="slot" role="group" aria-label="預留位置：專案">待蓋郵戳</div>
+			))}
+		</section>
+
+		<svg class="postmark" viewBox="0 0 120 120" role="img" aria-label={`今日郵戳 ${today}`}>
+			<defs>
+				<path id="pm-ring" d="M60 60 m-47 0 a47 47 0 1 1 94 0 a47 47 0 1 1 -94 0" />
+			</defs>
+			<circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="2" />
+			<circle cx="60" cy="60" r="34" fill="none" stroke="currentColor" stroke-width="1.25" />
+			<text font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2.6" font-weight="500">
+				<textPath href="#pm-ring" startOffset="0">BART LIAO · PORTFOLIO · POSTED ·</textPath>
+			</text>
+			<text id="pm-date" x="60" y="65" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">{today}</text>
+			<path d="M26 60h68" stroke="currentColor" stroke-width="1" opacity="0.6" transform="translate(0 -12)" />
+			<path d="M26 60h68" stroke="currentColor" stroke-width="1" opacity="0.6" transform="translate(0 12)" />
+		</svg>
+	</div>
 </Base>
+
+<script is:inline>
+	const el = document.getElementById('pm-date');
+	if (el) {
+		const d = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' })
+			.format(new Date())
+			.replaceAll('-', '.');
+		el.textContent = d;
+		el.closest('svg')?.setAttribute('aria-label', `今日郵戳 ${d}`);
+	}
+</script>

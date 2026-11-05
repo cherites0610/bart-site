@@ -1,53 +1,481 @@
-/* 暫時的基礎樣式；視覺設計（集郵冊）之後用 impeccable 處理 */
+/* 集郵冊視覺系統：深藍相簿頁、米白齒孔郵票、郵局綠做結構、郵戳紅做日期與現在位置 */
 :root {
 	color-scheme: light dark;
-	--bg: #fff;
-	--fg: #1a1a1a;
-	--muted: #666;
-	--accent: #b3261e;
-	--line: #ddd;
+	--paper: #f3eee2;
+	--ink: #14213a;
+	--muted: #4f5a74;
+	--green: #1f5f4a;
+	--red: #b3261e;
+	--line: #cfc8b6;
+	--album: #14213a;
+
+	/* 郵票與相簿頁本身不隨主題變：它們是物件 */
+	--stamp-face: #f4efe3;
+	--stamp-ink: #14213a;
+	--stamp-green: #1f5f4a;
+	--stamp-muted: #5a6479;
+	--album-ink: #ece6d6;
+	--album-muted: #aab4c8;
+	--postmark: #d8402f;
+
+	--serif: 'Noto Serif TC', 'Songti TC', serif;
+	--sans: 'Noto Sans TC', system-ui, sans-serif;
+	--mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 :root[data-theme='dark'] {
 	color-scheme: dark;
-	--bg: #101826;
-	--fg: #eee;
-	--muted: #9aa;
-	--line: #334;
+	--paper: #0a111f;
+	--ink: #ece6d6;
+	--muted: #a3adc2;
+	--green: #6fbf9c;
+	--red: #ff7566;
+	--line: #26334f;
+	--album: #172640;
 }
 :root[data-theme='light'] {
 	color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
 	:root:not([data-theme='light']) {
-		--bg: #101826;
-		--fg: #eee;
-		--muted: #9aa;
-		--line: #334;
+		--paper: #0a111f;
+		--ink: #ece6d6;
+		--muted: #a3adc2;
+		--green: #6fbf9c;
+		--red: #ff7566;
+		--line: #26334f;
+		--album: #172640;
 	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
 body {
 	margin: 0;
-	background: var(--bg);
-	color: var(--fg);
-	font-family: 'Noto Sans TC', system-ui, sans-serif;
+	min-height: 100svh;
+	display: flex;
+	flex-direction: column;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--sans);
 	line-height: 1.8;
+	-webkit-font-smoothing: antialiased;
 }
 main {
+	flex: 1;
+	width: 100%;
 	max-width: 44rem;
 	margin: 0 auto;
 	padding: 2rem 1rem;
 }
+main:has(> .album) {
+	max-width: 160rem;
+	padding: 0 clamp(0.75rem, 2.5vw, 2rem);
+}
 a {
 	color: inherit;
+	text-underline-offset: 0.2em;
+	text-decoration-thickness: 1px;
 }
-nav {
+::selection {
+	background: var(--red);
+	color: #fff;
+}
+:focus-visible {
+	outline: 2px solid var(--red);
+	outline-offset: 3px;
+	border-radius: 2px;
+}
+html {
+	scrollbar-color: var(--green) var(--paper);
+}
+h1,
+h2 {
+	font-family: var(--serif);
+	font-weight: 700;
+	text-wrap: balance;
+}
+
+.skip-link {
+	position: absolute;
+	left: 0.75rem;
+	top: -4rem;
+	z-index: 10;
+	padding: 0.5rem 0.9rem;
+	background: var(--stamp-face);
+	color: var(--stamp-ink);
+	font-family: var(--mono);
+	font-size: 0.875rem;
+}
+.skip-link:focus {
+	top: 0.75rem;
+}
+
+/* 站台導覽 */
+.site-header {
+	max-width: 160rem;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 clamp(0.75rem, 2.5vw, 2rem);
+}
+.site-header nav {
 	display: flex;
-	gap: 1rem;
-	padding: 1rem;
-	justify-content: center;
+	align-items: center;
+	gap: clamp(0.75rem, 2.5vw, 1.75rem);
+	padding: 0.9rem 0;
+	font-family: var(--mono);
+	font-size: 0.875rem;
 }
+.site-header nav a {
+	text-decoration: none;
+	color: var(--muted);
+	padding: 0.25rem 0;
+	border-bottom: 1px solid transparent;
+	transition: color 0.2s, border-color 0.2s;
+}
+.site-header nav a:hover {
+	color: var(--ink);
+	border-color: var(--line);
+}
+.site-header nav a[aria-current='page'] {
+	color: var(--red);
+	border-color: var(--red);
+}
+.site-header nav #theme-toggle {
+	margin-left: auto;
+}
+.site-footer {
+	max-width: 160rem;
+	width: 100%;
+	margin: 0 auto;
+	padding: 1.25rem clamp(0.75rem, 2.5vw, 2rem);
+	font-family: var(--mono);
+	font-size: 0.8125rem;
+	color: var(--muted);
+}
+
 .placeholder {
 	border: 1px dashed var(--line);
 	padding: 1rem;
 	color: var(--muted);
+}
+
+/* ───────── 首頁：封面（相簿第一頁） ───────── */
+.album {
+	--hole: 5px;
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+	gap: clamp(1.5rem, 4vw, 4rem);
+	min-height: calc(100svh - 7.5rem);
+	padding-inline: clamp(1.5rem, 5vw, 7rem);
+	padding-block: clamp(1.5rem, 4vw, 4.5rem);
+	background: var(--album);
+	color: var(--album-ink);
+	border-radius: 6px;
+	box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 18px 40px -18px rgb(5 10 25 / 0.55);
+	isolation: isolate;
+	overflow: clip;
+}
+
+.cover {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 2.5rem;
+	position: relative;
+	z-index: 2;
+}
+.cover h1 {
+	margin: 0;
+	font-size: clamp(3rem, 6vw, 6rem);
+	line-height: 1.05;
+	letter-spacing: -0.02em;
+}
+.cover h1 .latin {
+	display: block;
+	margin-top: 0.4rem;
+	font-family: var(--mono);
+	font-weight: 500;
+	font-size: 0.34em;
+	letter-spacing: 0.02em;
+	color: var(--album-muted);
+}
+.cover .line span {
+	display: inline-block;
+}
+.cover .line {
+	margin: 1.5rem 0 0;
+	max-width: 18em;
+	font-size: clamp(1.125rem, 2vw, 1.5rem);
+	line-height: 1.7;
+	text-wrap: balance;
+}
+
+.contact {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	align-items: flex-end;
+}
+
+/* 郵票通用 */
+.stamp {
+	--p: 6px; /* 齒孔半徑 */
+	--pitch: 14px;
+	position: relative;
+	display: block;
+	color: var(--stamp-ink);
+	text-decoration: none;
+	padding: 0.9rem;
+	background:
+		radial-gradient(circle at 50% 0, var(--album) 0 var(--p), transparent calc(var(--p) + 0.5px)) 0 0 / var(--pitch) calc(var(--p) + 1px) repeat-x,
+		radial-gradient(circle at 50% 100%, var(--album) 0 var(--p), transparent calc(var(--p) + 0.5px)) 0 100% / var(--pitch) calc(var(--p) + 1px) repeat-x,
+		radial-gradient(circle at 0 50%, var(--album) 0 var(--p), transparent calc(var(--p) + 0.5px)) 0 0 / calc(var(--p) + 1px) var(--pitch) repeat-y,
+		radial-gradient(circle at 100% 50%, var(--album) 0 var(--p), transparent calc(var(--p) + 0.5px)) 100% 0 / calc(var(--p) + 1px) var(--pitch) repeat-y,
+		var(--stamp-face);
+	transition: transform 0.35s var(--ease-out);
+}
+.stamp::before {
+	/* 透明護貼條 */
+	content: '';
+	position: absolute;
+	top: -9px;
+	left: 50%;
+	width: 38%;
+	height: 16px;
+	translate: -50% 0;
+	rotate: -1.5deg;
+	background: rgb(236 230 214 / 0.16);
+	border: 1px solid rgb(236 230 214 / 0.14);
+	pointer-events: none;
+}
+.stamp-inner {
+	position: relative;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	padding: 0.9rem;
+	border: 1px solid var(--stamp-green);
+	overflow: hidden;
+}
+.stamp-art {
+	/* 純幾何的版畫底紋：同心環 */
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	color: var(--stamp-green);
+	opacity: 0.22;
+}
+.stamp-kind {
+	position: relative;
+	margin: 0;
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	letter-spacing: 0.06em;
+	color: var(--stamp-green);
+}
+.stamp-title {
+	position: relative;
+	margin: 0.35rem 0 0;
+	font-family: var(--serif);
+	font-weight: 700;
+	line-height: 1.3;
+	text-wrap: balance;
+}
+.stamp-note {
+	position: relative;
+	margin: 0.4rem 0 0;
+	font-size: 0.875rem;
+	line-height: 1.6;
+	color: var(--stamp-muted);
+}
+a.stamp:hover,
+a.stamp:focus-visible {
+	transform: translateY(-4px) rotate(-0.6deg);
+}
+a.stamp:focus-visible {
+	outline-color: var(--postmark);
+	outline-offset: 5px;
+}
+
+/* 尚未貼上的位置：只有輪廓與護貼角，不裝作有內容 */
+.slot {
+	position: relative;
+	display: grid;
+	place-items: end start;
+	padding: 1rem;
+	border: 1.5px dashed rgb(236 230 214 / 0.38);
+	border-radius: 2px;
+	color: var(--album-muted);
+	font-family: var(--serif);
+	font-weight: 700;
+	font-size: 0.9375rem;
+	letter-spacing: 0.12em;
+	text-align: left;
+}
+
+.plate {
+	position: relative;
+	z-index: 1;
+	display: grid;
+	grid-template-columns: auto clamp(9rem, 13vw, 17rem);
+	grid-template-rows: repeat(3, minmax(0, 1fr));
+	gap: clamp(1rem, 2vw, 1.75rem);
+	align-self: center;
+	justify-self: center;
+}
+.plate > .stamp-main {
+	grid-row: 1 / 4;
+	height: clamp(24rem, min(66svh, 38vw), 50rem);
+	aspect-ratio: 4 / 5;
+	filter: drop-shadow(0 10px 14px rgb(4 8 20 / 0.5));
+}
+.plate > .stamp-main .stamp-inner {
+	padding: 1.4rem;
+}
+.stamp-main .stamp-title {
+	font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+}
+.plate > .stamp-small {
+	filter: drop-shadow(0 6px 8px rgb(4 8 20 / 0.45));
+	min-height: 7.5rem;
+}
+.plate > .stamp-small:nth-of-type(3) {
+	rotate: 1.2deg;
+}
+.plate > .stamp-small:nth-of-type(4) {
+	rotate: -0.8deg;
+}
+.stamp-small .stamp-inner {
+	padding: 0.7rem;
+}
+.stamp-small .stamp-title {
+	font-size: 1rem;
+}
+.plate > .slot {
+	min-height: 7.5rem;
+}
+
+/* 聯絡：郵票形的小動作 */
+.stamp-link {
+	--p: 4px;
+	--pitch: 10px;
+	display: inline-flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	min-width: 7.5rem;
+	padding: 0.7rem 0.9rem;
+	filter: drop-shadow(0 4px 6px rgb(4 8 20 / 0.45));
+}
+.stamp-link::before {
+	display: none;
+}
+.stamp-link .label {
+	font-family: var(--mono);
+	font-size: 0.6875rem;
+	letter-spacing: 0.06em;
+	color: var(--stamp-green);
+}
+.stamp-link .action {
+	font-family: var(--serif);
+	font-weight: 700;
+	font-size: 1.0625rem;
+	line-height: 1.4;
+}
+
+/* 郵戳：今天的日期，壓在大郵票右上角 */
+.postmark {
+	position: absolute;
+	z-index: 3;
+	top: clamp(0.75rem, 3vw, 2.25rem);
+	right: clamp(0.75rem, 3vw, 2.25rem);
+	width: clamp(6.5rem, 12vw, 9rem);
+	height: auto;
+	rotate: -14deg;
+	color: var(--postmark);
+	mix-blend-mode: normal;
+	pointer-events: none;
+	animation: postmark-in 0.7s var(--ease-out) 0.25s backwards;
+}
+.postmark text {
+	fill: currentColor;
+}
+@keyframes postmark-in {
+	from {
+		opacity: 0;
+		scale: 1.45;
+		rotate: -26deg;
+		filter: blur(6px);
+	}
+}
+
+@media (max-width: 75rem) {
+	.album {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: auto minmax(0, 1fr);
+	}
+	.cover {
+		padding-right: 6rem;
+	}
+	.cover .contact {
+		order: 3;
+	}
+	.plate {
+		align-self: stretch;
+		justify-self: stretch;
+		grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+	}
+	.plate > .stamp-main {
+		height: auto;
+		aspect-ratio: auto;
+		min-height: 24rem;
+	}
+}
+@media (max-width: 36rem) {
+	.album {
+		min-height: 0;
+		grid-template-rows: auto;
+	}
+	.cover {
+		padding-right: 0;
+		padding-top: 4.5rem;
+	}
+	.plate {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-rows: auto;
+	}
+	.plate > .stamp-main {
+		grid-column: 1 / -1;
+		grid-row: auto;
+		min-height: 18rem;
+		height: auto;
+		aspect-ratio: auto;
+	}
+	.plate > .stamp-small,
+	.plate > .slot {
+		min-height: 6rem;
+	}
+	.stamp-small .stamp-title {
+		font-size: 0.875rem;
+	}
+	.stamp-small .stamp-note {
+		display: none;
+	}
+	.postmark {
+		width: 5.5rem;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.postmark {
+		animation: none;
+	}
+	.stamp {
+		transition: none;
+	}
 }
