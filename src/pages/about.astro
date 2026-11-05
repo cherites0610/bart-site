@@ -1,8 +1,72 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import portrait from '../assets/portrait.jpg';
 ---
 
-<Base title="About">
-	<h1>About</h1>
-	<p class="placeholder">【預留位置】自我介紹待作者提供。</p>
+<Base
+	title="About"
+	description="廖柏安 Bart：銘傳大學資訊管理學系畢業，從黑客松的 LINE Bot 走到維護正式上線的 SaaS，做後端與全端開發。"
+>
+	<div class="album about">
+		<div class="portrait">
+			<div class="stamp stamp-main">
+				<div class="stamp-inner">
+					<Image src={portrait} alt="廖柏安的證件照" width={640} height={800} loading="eager" />
+				</div>
+			</div>
+			<div class="contact">
+				<a class="stamp stamp-link" href="https://github.com/cherites0610">
+					<span class="label">GITHUB</span>
+					<span class="action">看我的程式碼</span>
+				</a>
+				<a class="stamp stamp-link" href="mailto:cherites0610@gmail.com">
+					<span class="label">EMAIL</span>
+					<span class="action">寄信給我</span>
+				</a>
+			</div>
+		</div>
+
+		<section class="about-body" aria-labelledby="about-title">
+			<h1 id="about-title">關於我</h1>
+			<p class="lead">從一場黑客松的 LINE Bot，走到維護正式上線的 SaaS。</p>
+
+			<div class="prose">
+				<p>
+					我是廖柏安，2026 年自銘傳大學資訊管理學系畢業。大二參加黑客松，和三位夥伴做出一個校園多功能 LINE Bot，那是我第一次看到自己寫的程式真的被人使用。也是從那時候我發現，系統成敗往往不在技術本身，而在使用者願不願意用。
+				</p>
+				<p>
+					大三下學期起，我在技統運動擔任後端實習工程師，接手維護兩套正式上線的 SaaS：生鮮電商平台「鮮自主」，與高爾夫球場管理系統「球員獵人」。改版時任何一行程式都會影響真實營運，這讓我第一次真正學到「為系統負責」是什麼意思。
+				</p>
+				<p>
+					實習期間，我也獨立負責「N 世代學苑」課程報名系統的後端：從架構設計、金流串接到部署維運，穩定支撐約 500 位使用者。我現在最想弄懂的，是一套 SaaS 要怎麼長期穩定地運作，也想持續探索 AI / LLM 在其中的應用。
+				</p>
+			</div>
+
+			<ul class="facts" aria-label="重點經歷">
+				<li class="stamp stamp-small">
+					<div class="stamp-inner">
+						<p class="stamp-kind">學歷</p>
+						<h2 class="stamp-title"><span>銘傳大學</span> <span>資訊管理學系</span></h2>
+						<p class="stamp-note">理學士，2026</p>
+					</div>
+				</li>
+				<li class="stamp stamp-small">
+					<div class="stamp-inner">
+						<p class="stamp-kind">實習</p>
+						<h2 class="stamp-title"><span>技統運動</span> <span>後端實習工程師</span></h2>
+						<p class="stamp-note">2025 – 2026</p>
+					</div>
+				</li>
+				<li class="stamp stamp-small">
+					<div class="stamp-inner">
+						<p class="stamp-kind">證照</p>
+						<h2 class="stamp-title"><span>iPAS</span> <span>資訊安全工程師</span></h2>
+						<p class="stamp-note">初級，2025.07</p>
+					</div>
+				</li>
+			</ul>
+
+		</section>
+	</div>
 </Base>
