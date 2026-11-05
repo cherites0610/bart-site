@@ -27,6 +27,12 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 		<meta name="generator" content={Astro.generator} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="alternate" type="application/rss+xml" title="廖柏安 Bart" href="/rss.xml" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@700&display=swap"
+		/>
 		<title>{fullTitle}</title>
 		<script is:inline>
 			const t = localStorage.getItem('theme');
@@ -34,7 +40,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 		</script>
 	</head>
 	<body>
-		<header>
+		<header class="site-header">
 			<nav aria-label="主選單">
 				{nav.map(([href, label]) => (
 					<a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
@@ -43,6 +49,6 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 			</nav>
 		</header>
 		<main><slot /></main>
-		<footer><small>© 廖柏安 Bart</small></footer>
+		<footer class="site-footer"><small>© 廖柏安 Bart</small></footer>
 	</body>
 </html>
