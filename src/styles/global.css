@@ -1,0 +1,53 @@
+/* 暫時的基礎樣式；視覺設計（集郵冊）之後用 impeccable 處理 */
+:root {
+	color-scheme: light dark;
+	--bg: #fff;
+	--fg: #1a1a1a;
+	--muted: #666;
+	--accent: #b3261e;
+	--line: #ddd;
+}
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--bg: #101826;
+	--fg: #eee;
+	--muted: #9aa;
+	--line: #334;
+}
+:root[data-theme='light'] {
+	color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		--bg: #101826;
+		--fg: #eee;
+		--muted: #9aa;
+		--line: #334;
+	}
+}
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font-family: 'Noto Sans TC', system-ui, sans-serif;
+	line-height: 1.8;
+}
+main {
+	max-width: 44rem;
+	margin: 0 auto;
+	padding: 2rem 1rem;
+}
+a {
+	color: inherit;
+}
+nav {
+	display: flex;
+	gap: 1rem;
+	padding: 1rem;
+	justify-content: center;
+}
+.placeholder {
+	border: 1px dashed var(--line);
+	padding: 1rem;
+	color: var(--muted);
+}

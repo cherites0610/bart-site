@@ -1,0 +1,10 @@
+<button id="theme-toggle" type="button" aria-label="切換深色模式">◐</button>
+<script>
+	const root = document.documentElement;
+	document.getElementById('theme-toggle')?.addEventListener('click', () => {
+		const dark = getComputedStyle(root).colorScheme.startsWith('dark');
+		const next = dark ? 'light' : 'dark';
+		root.dataset.theme = next;
+		localStorage.setItem('theme', next);
+	});
+</script>
