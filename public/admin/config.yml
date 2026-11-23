@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+# Sveltia CMS 設定。欄位需與 src/content.config.ts 的 schema 保持一致。
+
+backend:
+  name: github
+  repo: cherites0610/bart-site
+  branch: master
+  # 用 fine-grained personal access token 登入（只授權本 repo 的 Contents 讀寫），不需要 OAuth Worker
+  auth_methods: [token]
+  commit_messages:
+    create: '新增 {{collection}}「{{slug}}」'
+    update: '更新 {{collection}}「{{slug}}」'
+    delete: '刪除 {{collection}}「{{slug}}」'
+    uploadMedia: '上傳 {{path}}'
+    deleteMedia: '刪除 {{path}}'
+
+site_url: https://site.cherites.org
+
+# 共用圖庫（不經 Astro 最佳化，固定網址 /uploads/...）。
+# 文章與專案的圖片會存在各自的資料夾，見下方各 collection 的 media_folder。
+media_folder: public/uploads
+public_folder: /uploads
+
+# 網址用英數；標題是中文，建立時請在 slug 欄位手動填英文
+slug:
+  encoding: ascii
+  lowercase: true
+
+# 選填欄位留空時不寫進 frontmatter，否則 zod 的 url() 會擋下空字串
+output:
+  omit_empty_optional_fields: true
+
+collections:
+  - name: blog
+    label: 文章
+    label_singular: 文章
+    folder: src/content/blog
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    create: true
+    slug:
+      template: '{{slug}}'
+      editable: true
+      hint: 用小寫英數與連字號，會成為網址 /blog/<slug>
+    preview_path: '/blog/{{slug}}'
+    preview_path_date_field: pubDate
+    aliases_field: false
+    summary: "{{title}} {{draft | ternary('（草稿）', '')}}"
+    sortable_fields:
+      fields: [pubDate, title]
+      default: { field: pubDate, direction: descending }
+    view_filters:
+      - { label: 草稿, field: draft, pattern: true }
+      - { label: 已發布, field: draft, pattern: false }
+    fields:
+      - { name: title, label: 標題, widget: string }
+      - { name: description, label: 摘要, widget: text, hint: 一句話，顯示在列表與分享預覽 }
+      - { name: pubDate, label: 發布日期, widget: datetime, type: date, default: '{{now}}' }
+      - { name: tags, label: 標籤, widget: list, required: false }
+      - { name: draft, label: 草稿, widget: boolean, default: true, hint: 草稿不會出現在正式站 }
+      - name: body
+        label: 內文
+        widget: richtext
+        editor_components: [code-block, image, table, hr]
+
+  - name: projects
+    label: 專案
+    label_singular: 專案
+    folder: src/content/projects
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    create: true
+    slug:
+      template: '{{slug}}'
+      editable: true
+      hint: 用小寫英數與連字號，會成為網址 /projects/<slug>
+    preview_path: '/projects/{{slug}}'
+    aliases_field: false
+    sortable_fields:
+      fields: [date, title]
+      default: { field: date, direction: descending }
+    fields:
+      - { name: title, label: 名稱, widget: string }
+      - { name: summary, label: 摘要, widget: text }
+      - { name: role, label: 角色, widget: string, hint: 例如「個人專案・設計與開發」 }
+      - { name: stack, label: 技術棧, widget: list }
+      - name: art
+        label: 郵票圖樣
+        widget: select
+        required: false
+        options: [kit]
+        hint: 需先在 StampArt.astro 畫好圖樣；沒有就留空
+      - { name: demo, label: Demo 網址, widget: string, required: false, pattern: ['^https?://', '需為完整網址'] }
+      - { name: source, label: 原始碼網址, widget: string, required: false, pattern: ['^https?://', '需為完整網址'] }
+      - { name: date, label: 日期, widget: datetime, type: date, default: '{{now}}' }
+      - { name: draft, label: 草稿, widget: boolean, default: false }
+      - { name: body, label: 介紹, widget: richtext, editor_components: [code-block, image, table, hr] }
