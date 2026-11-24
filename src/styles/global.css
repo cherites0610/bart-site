@@ -548,6 +548,14 @@ main:has(> .album:not(.about)) {
 		min-height: 24rem;
 	}
 }
+/* 首頁小郵票的格子高度固定，標題與說明各最多兩行，避免文字被擠出郵票 */
+.plate > .stamp-small .stamp-title,
+.plate > .stamp-small .stamp-note {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+}
 /* 手機（≤36rem）：依 DESIGN.md，相簿頁依內容高度、可捲動。
    固定一屏在手機上放不下，大郵票會被壓扁、文字跑出郵票外。 */
 @media (max-width: 36rem) {
@@ -561,11 +569,26 @@ main:has(> .album:not(.about)) {
 	}
 	.plate {
 		height: auto;
-		grid-template-rows: auto 5.5rem;
+		grid-template-rows: auto minmax(5.5rem, auto);
 	}
 	.plate > .stamp-main .stamp-art {
 		flex: none;
 		height: 6rem;
+	}
+	/* 三欄小郵票很窄：縮小齒孔內距，標題可在任意處換行 */
+	.plate > .stamp-small {
+		padding: 0.55rem;
+	}
+	.plate > .stamp-small .stamp-inner {
+		padding: 0.5rem;
+	}
+	.plate > .stamp-small .stamp-title {
+		font-size: 0.8125rem;
+		overflow-wrap: anywhere;
+		-webkit-line-clamp: 4;
+	}
+	.plate > .stamp-small .stamp-note {
+		display: none;
 	}
 }
 
