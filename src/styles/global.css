@@ -548,6 +548,26 @@ main:has(> .album:not(.about)) {
 		min-height: 24rem;
 	}
 }
+/* 手機（≤36rem）：依 DESIGN.md，相簿頁依內容高度、可捲動。
+   固定一屏在手機上放不下，大郵票會被壓扁、文字跑出郵票外。 */
+@media (max-width: 36rem) {
+	body:has(.album:not(.about)) {
+		height: auto;
+		overflow: visible;
+	}
+	.album:not(.about) {
+		height: auto;
+		min-height: calc(100svh - 7.5rem);
+	}
+	.plate {
+		height: auto;
+		grid-template-rows: auto 5.5rem;
+	}
+	.plate > .stamp-main .stamp-art {
+		flex: none;
+		height: 6rem;
+	}
+}
 
 /* ───────── About：相簿頁（左：證件照郵票，右：自我介紹） ───────── */
 .album.about {
@@ -635,9 +655,18 @@ main:has(> .album:not(.about)) {
 		grid-template-columns: minmax(0, 1fr);
 		grid-template-rows: auto;
 	}
+	/* 郵票高度由照片撐開；照片自己帶 4:5 比例，不依賴 Safari 常算不出來的 height: 100% */
 	.about .portrait .stamp-main {
 		width: min(100%, 15rem);
 		min-height: 0;
+		aspect-ratio: auto;
+	}
+	.about .portrait .stamp-inner {
+		height: auto;
+	}
+	.about .portrait img {
+		height: auto;
+		aspect-ratio: 4 / 5;
 	}
 	.about .portrait {
 		justify-items: start;
