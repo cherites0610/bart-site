@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+# Sveltia CMS 設定。欄位需與 src/content.config.ts 的 blog schema 一致。
+backend:
+  name: github
+  repo: cherites0610/bart-site
+  branch: master
+  # 目前只用 GitHub 存取權杖登入；之後若架 sveltia-cms-auth，改成 [oauth, token] 並加上 base_url
+  auth_methods: [token]
+  # 預覽連結取自 Cloudflare Pages 回報在 PR 上的 check run
+  preview_context: Cloudflare Pages
+  commit_messages:
+    create: '新增文章「{{slug}}」'
+    update: '更新文章「{{slug}}」'
+    delete: '刪除文章「{{slug}}」'
+    uploadMedia: '上傳「{{path}}」'
+    deleteMedia: '刪除「{{path}}」'
+
+app_title: bart-site 寫文章
+
+# 審稿流程：存檔會在 cms/blog/<代稱> 分支開 PR，Cloudflare 產生預覽網址；
+# 在後台把狀態改成「準備就緒」後按「發布」，才會合併進 master 上線。
+publish_mode:
+  type: editorial_workflow
+  stages: [draft, pending_publish]
+  allow_incomplete_drafts: false
+site_url: https://site.cherites.org
+
+# 全域媒體資料夾（必填）；文章圖片實際存在各文章自己的資料夾，見下方 collection。
+media_folder: /public/media
+public_folder: /media
+
+collections:
+  - name: blog
+    label: 文章
+    label_singular: 文章
+    folder: src/content/blog
+    create: true
+    # 每篇一個資料夾：src/content/blog/<slug>/index.md，圖片放同一處，建置時由 Astro 壓縮
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    slug:
+      editable: [create]
+      hint: 文章網址 /blog/<代稱>，只能用英文小寫、數字與連字號；存檔後不可修改
+      pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', '只能用英文小寫、數字與連字號']
+    preview_path: /blog/{{slug}}/
+    summary: '{{pubDate}}・{{title}}'
+    sortable_fields: [pubDate, title]
+    fields:
+      - { name: title, label: 標題, widget: string }
+      - { name: description, label: 摘要, widget: text, hint: 一句話摘要，顯示在列表與分享卡片 }
+      - { name: pubDate, label: 發布日期, widget: datetime, type: date, default: '{{now}}' }
+      - { name: tags, label: 標籤, widget: list, required: false, default: [] }
+      - { name: draft, label: 隱藏, widget: boolean, default: false, hint: 開啟時即使已發布也不會出現在正式站（預覽網址仍看得到） }
+      - { name: body, label: 內文, widget: richtext }

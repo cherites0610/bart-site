@@ -2,9 +2,10 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
+import { showDrafts } from '../../lib/drafts';
 
-// 草稿只在 dev 預覽
-const posts = await getCollection('blog', (p) => import.meta.env.DEV || !p.data.draft);
+// 草稿只在 dev 與預覽部署顯示
+const posts = await getCollection('blog', (p) => showDrafts || !p.data.draft);
 ---
 
 <Base title="Blog" description="廖柏安的技術筆記，依日期由新到舊。">
