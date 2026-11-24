@@ -65,7 +65,9 @@ npm run dev
 
 ### 文章
 
-在 `src/content/blog/` 新增 `.md` 檔，網址為 `/blog/<檔名>`：
+**用後台寫（手機、電腦皆可）**：打開 <https://site.cherites.org/admin/>，以 GitHub 存取權杖登入（fine-grained token，只授權本 repo 的 Contents 讀寫）。存檔即 commit 到 `master` 並自動部署；新文章預設為草稿，關掉「草稿」才會出現在正式站。圖片直接在編輯器上傳，會與文章放在同一個資料夾。
+
+**直接寫檔**：每篇文章一個資料夾 `src/content/blog/<代稱>/index.md`，網址為 `/blog/<代稱>`；圖片放同一個資料夾、用相對路徑引用（`![說明](photo.jpg)`），建置時會自動壓縮：
 
 ```md
 ---
